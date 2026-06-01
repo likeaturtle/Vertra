@@ -1,6 +1,6 @@
 # Makefile for File Transfer System (Full Stack)
 
-.PHONY: build clean run dev frontend backend fullstack help
+.PHONY: build clean run dev frontend backend fullstack help build-armv7
 
 # 构建参数
 GOCMD=go
@@ -61,6 +61,13 @@ build-linux:
 	@echo "🐧 Linux 交叉编译..."
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOBUILD) -o $(BINARY_UNIX) -v ./cmd
 
+# ARMv7 交叉编译 (ARM Cortex-A7, 32-bit)
+build-armv7:
+	@echo "🦾 ARMv7 交叉编译 (Cortex-A7)..."
+	mkdir -p dist
+	CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 $(GOBUILD) -ldflags="-s -w -extldflags '-static'" -o dist/file-transfer-server-linux-armv7 -v ./cmd
+	@echo "✅ 输出: dist/file-transfer-server-linux-armv7"
+
 # 安装依赖
 install-deps:
 	@echo "📦 安装 Go 依赖..."
@@ -98,6 +105,8 @@ help:
 	@echo ""
 	@echo "其他命令："
 	@echo "  make run-quick   - 直接运行现有二进制"
+	@echo "  make build-linux - Linux amd64 交叉编译"
+	@echo "  make build-armv7 - ARMv7 (Cortex-A7) 交叉编译"
 	@echo "  make build-linux - Linux 交叉编译"
 	@echo "  make install-deps- 安装所有依赖"
 	@echo "  make check       - 代码检查和格式化"

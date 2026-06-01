@@ -40,6 +40,7 @@ PLATFORMS=(
     "darwin/arm64:file-transfer-server-macos-arm64"  
     "linux/amd64:file-transfer-server-linux-amd64"
     "linux/arm64:file-transfer-server-linux-arm64"
+    "linux/arm:file-transfer-server-linux-armv7"
 )
 
 # 打印函数
@@ -226,8 +227,14 @@ build_backend() {
         
         print_verbose "构建 $platform -> $binary_name"
         
+        # 构建 ARM 32位 时指定 ARMv7 架构 (Cortex-A7 等)
+        local goarm_env=""
+        if [ "$goarch" = "arm" ]; then
+            goarm_env="GOARM=7"
+        fi
+        
         # 设置环境变量并构建
-        if ! env CGO_ENABLED=0 GOOS="$goos" GOARCH="$goarch" go build \
+        if ! env CGO_ENABLED=0 GOOS="$goos" GOARCH="$goarch" $goarm_env go build \
             -ldflags "$ldflags" \
             -o "$output_path" \
             ./cmd; then
