@@ -4,7 +4,6 @@
 *.dll
 *.so
 *.dylib
-.github/*
 # 测试二进制文件
 *.test
 
@@ -101,12 +100,8 @@ production/
 # 备份文件
 backup/
 
-*.log
 /bin/*
-./chuan-next/node_modules/
 # Next.js相关
 .next/
-./chuan/.next
-./internal/web/frontend/*
-./file-transfer-server
+/internal/web/frontend/*
 file-transfer-server
